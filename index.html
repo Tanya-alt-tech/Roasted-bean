@@ -118,9 +118,10 @@ nav .btn{min-height:42px;font-size:13px;padding:0 16px}
 .note{font-size:13px;color:var(--mute);margin-top:22px}
 
 .mq{overflow:hidden;padding:20px 0;background:var(--red)}
-.mq div{display:flex;gap:40px;width:max-content;animation:mq 26s linear infinite;font:clamp(34px,5vw,60px)/1 Anton,sans-serif;text-transform:uppercase;color:#fff}
+.mq div{display:flex;gap:40px;width:max-content;animation:mq 26s linear infinite;will-change:transform;-webkit-animation:mq 26s linear infinite;font:clamp(34px,5vw,60px)/1 Anton,sans-serif;text-transform:uppercase;color:#fff}
 .mq span::after{content:"★";margin-left:40px;color:var(--cheese)}
-@keyframes mq{to{transform:translateX(-50%)}}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@-webkit-keyframes mq{from{-webkit-transform:translateX(0)}to{-webkit-transform:translateX(-50%)}}
 
 .br{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .bc{border:1px solid var(--line);border-radius:14px;padding:28px;background:var(--bg2)}
@@ -144,7 +145,7 @@ footer .bigf{font-size:clamp(54px,13vw,190px);color:transparent;-webkit-text-str
 footer .row{justify-content:space-between;margin-top:30px;font-size:13px;color:var(--mute)}
 .fab{position:fixed;right:18px;bottom:18px;z-index:60;width:58px;height:58px;border-radius:50%;background:#25d366;display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 .fab svg{width:30px;height:30px}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+
 </style>
 </head>
 <body>
@@ -333,7 +334,7 @@ function onScroll(){
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 
 // smoke, steam and embers
-const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const still=false;
 const smokeTex=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');
   const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(235,225,215,.55)');r.addColorStop(.5,'rgba(220,210,200,.18)');r.addColorStop(1,'rgba(220,210,200,0)');
   g.fillStyle=r;g.fillRect(0,0,128,128);return c})();
