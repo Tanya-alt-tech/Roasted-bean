@@ -60,8 +60,12 @@ nav .btn{min-height:42px;font-size:13px;padding:0 16px}
 .temp{font:clamp(54px,8vw,112px)/1 Anton,sans-serif;color:var(--red);margin-top:24px}
 .temp small{font:600 13px Inter,sans-serif;color:var(--mute);display:block;margin-top:8px}
 .burger{position:relative;height:min(80svh,660px)}
-.shot{position:absolute;inset:6% 0;border-radius:18px;box-shadow:0 40px 90px rgba(0,0,0,.6);will-change:transform}
-.pins{list-style:none;padding:0;position:absolute;inset:6% 0}
+.burger{display:grid;place-items:center}
+.shot{position:relative;width:min(100%,56svh);aspect-ratio:4/5;border-radius:18px;box-shadow:0 40px 90px rgba(0,0,0,.6);will-change:transform;overflow:hidden;background-size:100% 100%}
+.pins{list-style:none;padding:0;position:absolute;inset:0;z-index:3}
+.glint{position:absolute;inset:0;z-index:1;background:linear-gradient(115deg,transparent 35%,rgba(255,240,190,.38) 47%,transparent 58%);background-size:250% 100%;mix-blend-mode:soft-light;animation:glint 6s ease-in-out infinite}
+@keyframes glint{0%{background-position:120% 0}60%,100%{background-position:-120% 0}}
+.fx{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
 .pins li{position:absolute;background:rgba(12,10,10,.82);border:1px solid var(--red);color:var(--ink);font:700 13px Inter,sans-serif;text-transform:uppercase;letter-spacing:.05em;padding:8px 12px;border-radius:6px;opacity:0;transform:translateY(14px);transition:opacity .4s,transform .4s;white-space:nowrap}
 .pins li::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--red);margin-right:8px;box-shadow:0 0 0 4px rgba(227,38,59,.3)}
 .pins li.on{opacity:1;transform:none}
@@ -71,7 +75,10 @@ nav .btn{min-height:42px;font-size:13px;padding:0 16px}
 .chap{position:relative;min-height:92svh;display:flex;align-items:flex-end;overflow:hidden}
 .chap .bg{position:absolute;inset:0;transform:scale(1.14);transition:transform 1.8s cubic-bezier(.2,.7,.2,1)}
 .chap.in .bg{transform:scale(1)}
-.chap::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,10,10,.94) 0,rgba(12,10,10,.55) 50%,rgba(12,10,10,.1)),linear-gradient(0deg,var(--bg) 0,transparent 30%)}
+.chap::after{z-index:0;content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,10,10,.94) 0,rgba(12,10,10,.55) 50%,rgba(12,10,10,.1)),linear-gradient(0deg,var(--bg) 0,transparent 30%)}
+.chap .fx{z-index:1}
+.hero .hfx{z-index:1}
+@media(min-width:900px){.hero .hfx{left:42%;width:58%}.chap .heat{filter:url(#heat)}}
 .chap .wrap{position:relative;z-index:2;width:100%;padding-bottom:clamp(48px,10vh,110px)}
 .chap h2{font-size:clamp(50px,8vw,124px);max-width:9ch}
 .chap p{max-width:440px;color:#eadfd4;margin-top:20px}
@@ -142,6 +149,7 @@ footer .row{justify-content:space-between;margin-top:30px;font-size:13px;color:v
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="heat" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.06" numOctaves="2" seed="3" result="n"><animate attributeName="baseFrequency" dur="7s" values="0.012 0.06;0.016 0.09;0.012 0.06" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="9"/></filter></svg>
 <nav id="nav"><div class="wrap">
   <a class="logo" href="#top" aria-label="The Roasted Bean, home"><i class="check"></i><b>The Roasted Bean</b></a>
   <div class="links"><a href="#layers">The burger</a><a href="#menu">Menu</a><a href="#branches">Branches</a><a href="#reserve">Reserve</a></div>
@@ -149,7 +157,7 @@ footer .row{justify-content:space-between;margin-top:30px;font-size:13px;color:v
 </div></nav>
 
 <header class="hero" id="top">
-  <div class="bg ph" data-img="hero" id="heroBg"></div>
+  <div class="bg ph" data-img="hero" id="heroBg"></div><canvas class="fx hfx" data-fx="steam"></canvas>
   <div class="wrap">
     <div class="tag rv">Burgers · Grills · Chicken · Home favourites</div>
     <h1 class="d rv">The Roasted <span>// Bean</span></h1>
@@ -168,20 +176,23 @@ footer .row{justify-content:space-between;margin-top:30px;font-size:13px;color:v
       <div class="temp"><span id="deg">0</span>°C<small>grill temperature for the perfect sear</small></div>
     </div>
     <div class="burger"><div class="glow"></div>
-      <div class="shot ph" data-img="layers" id="shot" role="img" aria-label="Close-up of a triple smash burger with melted cheddar"></div>
-      <ul class="pins" id="pins">
+      <div class="shot ph" data-img="layers" id="shot" role="img" aria-label="Close-up of a triple smash burger with melted cheddar">
+        <span class="glint"></span>
+        <canvas class="fx" data-fx="steam"></canvas>
+        <ul class="pins" id="pins">
         <li style="top:6%;left:6%">Toasted brioche</li>
         <li style="top:24%;right:4%">Melted cheddar</li>
         <li style="top:44%;left:4%">Smash patty x3</li>
         <li style="top:64%;right:4%">Crispy seared edges</li>
         <li style="top:86%;left:8%">Soft bottom bun</li>
       </ul>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="chap" id="sear">
-  <div class="bg ph" data-img="sear"></div>
+  <div class="bg ph heat" data-img="sear"></div><canvas class="fx" data-fx="fire"></canvas>
   <div class="big d rv">260°</div>
   <div class="wrap">
     <div class="tag rv">02. The sear</div>
@@ -215,7 +226,7 @@ footer .row{justify-content:space-between;margin-top:30px;font-size:13px;color:v
 </section>
 
 <section class="chap" id="grill">
-  <div class="bg ph" data-img="grill"></div>
+  <div class="bg ph heat" data-img="grill"></div><canvas class="fx" data-fx="fire"></canvas>
   <div class="wrap">
     <div class="tag rv">05. The grill</div>
     <h2 class="d rv">Not just burgers.</h2>
@@ -320,6 +331,33 @@ function onScroll(){
   deg.textContent=Math.round(260*Math.min(1,p*1.6));
 }
 addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// smoke, steam and embers
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const smokeTex=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');
+  const r=g.createRadialGradient(64,64,0,64,64,64);r.addColorStop(0,'rgba(235,225,215,.55)');r.addColorStop(.5,'rgba(220,210,200,.18)');r.addColorStop(1,'rgba(220,210,200,0)');
+  g.fillStyle=r;g.fillRect(0,0,128,128);return c})();
+document.querySelectorAll('canvas.fx').forEach(cv=>{
+  if(still)return;
+  const fire=cv.dataset.fx==='fire',ctx=cv.getContext('2d');let W=0,H=0,P=[],live=false,last=0;
+  const size=()=>{const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0)};
+  const rs=new ResizeObserver(size);rs.observe(cv);
+  const spawn=()=>{const ember=fire&&Math.random()<.55;
+    P.push(ember?{e:1,x:W*(.15+Math.random()*.7),y:H*(.75+Math.random()*.3),vx:(Math.random()-.5)*.4,vy:-(.6+Math.random()*1.4),s:1+Math.random()*2.2,l:0,m:90+Math.random()*120,f:Math.random()*6}
+                :{e:0,x:W*(fire?.1+Math.random()*.8:.3+Math.random()*.4),y:H*(fire?.85:.62+Math.random()*.2),vx:(Math.random()-.5)*.25,vy:-(.25+Math.random()*.45),s:W*(fire?.08:.06)+Math.random()*W*.06,l:0,m:220+Math.random()*160,f:Math.random()*6})};
+  const tick=t=>{if(!live)return;const dt=Math.min(2,(t-last)/16.7||1);last=t;
+    ctx.clearRect(0,0,W,H);if(P.length<(fire?70:26)&&Math.random()<(fire?.6:.25))spawn();
+    for(let i=P.length-1;i>=0;i--){const p=P[i];p.l+=dt;p.x+=(p.vx+Math.sin((p.l+p.f*40)/40)*(p.e?.35:.18))*dt;p.y+=p.vy*dt;
+      const k=p.l/p.m;if(k>=1){P.splice(i,1);continue}
+      if(p.e){const a=(1-k)*(.6+.4*Math.sin(p.l*.4+p.f));ctx.globalCompositeOperation='lighter';
+        ctx.fillStyle=`rgba(255,${120+Math.random()*80|0},40,${a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,7);ctx.fill();
+        ctx.fillStyle=`rgba(255,90,20,${a*.25})`;ctx.beginPath();ctx.arc(p.x,p.y,p.s*4,0,7);ctx.fill()}
+      else{const a=Math.sin(Math.PI*k)*(fire?.32:.22),z=p.s*(1+k*1.6);ctx.globalCompositeOperation='source-over';ctx.globalAlpha=a;
+        ctx.drawImage(smokeTex,p.x-z/2,p.y-z/2,z,z);ctx.globalAlpha=1}}
+    requestAnimationFrame(tick)};
+  const vis=new IntersectionObserver(es=>es.forEach(e=>{const was=live;live=e.isIntersecting;if(live&&!was){last=performance.now();requestAnimationFrame(tick)}}));
+  vis.observe(cv);
+});
 
 const d=document.getElementById('rd');d.min=new Date().toISOString().slice(0,10);d.value=d.min;
 document.getElementById('rf').addEventListener('submit',e=>{e.preventDefault();
